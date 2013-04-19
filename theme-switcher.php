@@ -175,6 +175,25 @@ class ThemeSwitcher {
 			wp_redirect($redirect);
 			exit;
 		}
+
+        $host = explode(".",$_SERVER['HTTP_HOST']);
+        if (sizeof($host) == 3 ) {
+            $subdomain = array_shift($host);
+            if ($subdomain != 'demo') {
+                $domain = array_shift($host);
+                if ( !empty($subdomain) && !empty($domain) ) {
+                    setcookie(
+                        "wptheme" . COOKIEHASH,
+                        stripslashes($domain.'-'.$subdomain),
+                        $expire,
+                        COOKIEPATH
+                    );
+                    $url = home_url();
+                    wp_redirect($url);
+                    exit;
+                }
+            }
+        }
 	}
 	
 	function theme_switcher_markup($style = "text", $instance = array()) {
