@@ -90,8 +90,9 @@ class ThemeSwitcher {
 
 	function __construct()
 	{
+        $this->theme_switcher_init();
 		add_action('init', array(&$this, 'set_theme_cookie'));
-		add_action('init', array(&$this, 'theme_switcher_init'));
+		//add_action('init', array(&$this, 'theme_switcher_init'));
 		add_action('widgets_init', array(&$this, 'event_widgets_init'));
 		
         add_filter('option_optionsframework', array(&$this, 'get_optionsframework'));
@@ -113,10 +114,12 @@ class ThemeSwitcher {
 	}
 
 	function get_stylesheet($stylesheet = '') {
-        if ( !empty( $this->stylesheet ) )
+        if ( !empty( $this->stylesheet ) ) {
             return $this->stylesheet;
-        else
+        }
+        else {
             return $stylesheet;
+        }
 	}
 
 	function get_template($template) {
@@ -182,13 +185,7 @@ class ThemeSwitcher {
             if ($subdomain != 'demo') {
                 $domain = array_shift($host);
                 if ( !empty($subdomain) && !empty($domain) ) {
-                    setcookie(
-                        "wptheme" . COOKIEHASH,
-                        stripslashes($domain.'-'.$subdomain),
-                        $expire,
-                        COOKIEPATH
-                    );
-                    $url = home_url();
+                    $url = home_url('/').'?wptheme='.$domain.'-'.$subdomain;
                     wp_redirect($url);
                     exit;
                 }
